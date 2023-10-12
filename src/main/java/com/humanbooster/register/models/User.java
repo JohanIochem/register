@@ -1,8 +1,10 @@
 package com.humanbooster.register.models;
 
+import com.humanbooster.register.Interfaces.RegisterGroup;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +13,18 @@ import java.util.List;
 @Table(name = "utilisateur")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    @NotBlank(message = "Veuillez saisir un nom" )
+    @NotBlank(message = "Veuillez saisir un nom", groups = {RegisterGroup.class})
     private String nom;
 
     @Column
-    @NotBlank(message = "Veuillez saisir un prénom")
+    @NotBlank(message = "Veuillez saisir un prénom", groups = {RegisterGroup.class})
     private String prenom;
     @Column(unique = true)
-    @NotBlank(message = "Veuillez saisir un email" )
-    @Email(message = "Veuillez saisir un email saisir")
+    @NotBlank(message = "Veuillez saisir un email", groups = {RegisterGroup.class} )
+    @Email(message = "Veuillez saisir un email valide", groups = {RegisterGroup.class})
     private String email;
     @Column
     private String password;
@@ -32,6 +34,10 @@ public class User {
 
     public User(String nom, String prenom, String email, String password, String confirmpassword) {
     this.roles = new ArrayList<Role>();
+    }
+
+    public User() {
+
     }
 
     public void addRole(Role role) {
@@ -47,6 +53,7 @@ public class User {
     private List<Role> roles;
 
     public User(String nom, String prenom, String email, String password, String confirmpassword, List<Role> roles) {
+        this.roles = new ArrayList<Role>();
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
